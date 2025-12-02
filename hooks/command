@@ -122,8 +122,12 @@ download_binary_and_run() {
   local test_mode="${BUILDKITE_PLUGIN_MONOREPO_DIFF_BUILDKITE_PLUGIN_TEST_MODE:-false}"
   local _url=""
 
-  if check_cmd "./${_executable}" && check_binary_version; then
-    _binary_version="$RETVAL"
+  if check_cmd "./${_executable}"; then
+    if check_binary_version; then
+      _binary_version="$RETVAL"
+    else
+      say "Warning: Could not determine binary version, will download fresh copy"
+    fi
   fi
 
   if [[ "$test_mode" == "true" ]]; then
